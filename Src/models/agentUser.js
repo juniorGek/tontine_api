@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema({
     profile: {
         type: String,
     },
+    zone: {
+        type: [String],
+        required: true
+    },
     enabled: {
         type: Boolean,
         default: false,
@@ -80,4 +84,4 @@ userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
 };
 
-module.exports = mongoose.model('users', userSchema);
+module.exports = mongoose.model('agent', userSchema);
