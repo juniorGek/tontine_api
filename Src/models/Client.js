@@ -16,6 +16,10 @@ const ClientSchema = new Schema({
     required: true,
     unique: true,
   },
+  datNaiss: {
+    type: Date,
+    required: true,
+  },
   adresse: {
     type: String,
     required: true,
@@ -23,25 +27,23 @@ const ClientSchema = new Schema({
   tel: {
     type: String,
     required: true,
-    unique:true
+    unique: true,
   },
   cni: {
     type: String,
     required: true,
-    unique:true,
+    unique: true,
   },
-  genre:{
+  genre: {
     type: String,
     required: true,
   },
-  note:{
+  note: {
     type: String,
-    required: true,
   },
   agentId: {
     type: Schema.Types.ObjectId,
     ref: 'agent',
-    required: true,
   },
   typeCompte: {
     type: Schema.Types.ObjectId,
@@ -52,11 +54,17 @@ const ClientSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  enabled:{
+  enabled: {
     type: Boolean,
     default: true,
     required: true,
-  }
+  },
+});
+
+// Middleware `pre-save` pour mettre `nom` en majuscules
+ClientSchema.pre('save', function (next) {
+  this.nom = this.nom.toUpperCase();
+  next();
 });
 
 const Client = mongoose.model('Client', ClientSchema);

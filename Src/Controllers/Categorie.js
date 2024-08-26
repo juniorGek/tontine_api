@@ -24,10 +24,6 @@ class Categorie{
     
     static getAllCategories = async(req,res) => {
         try {
-            const { user } = req.user; // Assuming userType is a field in the decoded token
-            if (user!== 'Admin' && user!== 'superAdmin') {
-                return res.status(403).json({ message: 'Access Denied: Insufficient Privileges' });
-            }
             const categories = await CategorieCompte.find({ enabled: true });
             return res.status(200).json({categories});
         } catch (error) {

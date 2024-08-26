@@ -25,9 +25,12 @@ router.get('/agent/listeAgent',authMiddleware,AgentAuthController.listeAgentAssi
 router.get('/agent/details/:id',authMiddleware,AgentAuthController.detailsAgent)
 
 router.post('/addCompte',authMiddleware,Categorie.addCategorie);
-router.get('/compte/liste',authMiddleware,Categorie.getAllCategories);
+router.get('/compte/liste',Categorie.getAllCategories);
 
 router.post('/addClient',authMiddleware,Clients.addClient);
+router.post('/registerClient',Clients.clientRegister);
+router.get('/awaitClient',authMiddleware,Clients.waitList);
+router.get('/waitclient/details/:id',authMiddleware,Clients.detailWaitClient)
 
 
 module.exports = router;
