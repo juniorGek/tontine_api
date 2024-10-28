@@ -54,9 +54,14 @@ const ClientSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  etatInscription: {
+    type: String,
+    enum: ['en attente', 'valide', 'refuse'],
+    default: 'en attente',
+  },
   enabled: {
     type: Boolean,
-    default: true,
+    default: false,
     required: true,
   },
 });

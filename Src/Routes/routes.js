@@ -4,6 +4,7 @@ const authMiddleware = require('../Middlewares/authMiddleware.JS');
 const AgentAuthController = require('../Controllers/AgentAuthController');
 const Categorie = require('../Controllers/Categorie');
 const Clients = require('../Controllers/Client');
+const checkUserType = require('../Middlewares/CheckUser');
 const router = express.Router();
 require("dotenv").config();
 
@@ -17,6 +18,9 @@ router.post('/register',authMiddleware, AuthController.register)
 router.post('/login', AuthController.login)
 
 router.get('/user',authMiddleware,AuthController.user)
+router.get('/nbClient',authMiddleware,checkUserType,Clients.countClients)
+
+router.get('/listeTotalClient',authMiddleware,checkUserType,Clients.ListeClientTotal);
 
 router.post('/agentRegister',authMiddleware ,AgentAuthController.AgentRegister)
 

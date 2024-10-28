@@ -30,6 +30,8 @@ class Clients {
       }
       const client = new Client(req.body);
       const pass = generateRandomPassword();
+      client.etatInscription = 'valide';
+      client.enabled = true;
       client.save();
 
       const account = await Account({
@@ -41,8 +43,8 @@ class Clients {
       });
       account.save();
 
-      console.log(account, client);
-      return res.json({ message: account, compte:accountNumber });
+     // console.log(account, client);
+      return res.json({ message: account, compte:accountNumber, pass:pass });
     } catch (error) {
       console.error(error);
       return res.json({
@@ -67,7 +69,6 @@ class Clients {
         return res.status(400).json({ message: "Client already exist" });
       }
       const client = new Client(req.body);
-      client.enabled = false;
       await client.save();
       return res.status(200).json({ message: "Client created" });
     } catch (error) {
@@ -88,7 +89,7 @@ class Clients {
           .json({ message: "Access Denied: Insufficient Privileges" });
       }
 
-      const client = await Client.find({ enabled: false }).sort({ createdAt: -1 });
+      const client = await Client.find({ enabled: false, etatInscription: 'en attente' }).sort({ createdAt: -1 });
       return res.status(200).json({ client });
 
     } catch (error) {
@@ -105,7 +106,7 @@ class Clients {
     const userId = req.params.id;
 
         // Rechercher l'utilisateur dans la base de données
-        const user = await Client.findById(userId)
+        const user = await Client.findById(userId).populate('typeCompte')
         if (!user) {
             return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
@@ -113,6 +114,49 @@ class Clients {
         res.status(200).json(user);
   }
 
+
+  static countClients = async (req, res) => {
+    try {
+
+      const nbWaitClient = await Client.countDocuments({enabled: false, etatInscription: 'en attente'});
+
+
+      // Compter le nombre total de clients
+      const nbTotalClient = await Client.countDocuments();
+  
+      // Compter les clients valides et actifs
+      const nbClientValideActif = await Client.countDocuments({ etatInscription: 'valide', enabled: true });
+  
+      // Compter les clients refusés
+      const nbClientRefuse = await Client.countDocuments({ etatInscription: 'refuse' });
+  
+      // Compter les clients inactifs
+      const nbClientInactif = await Client.countDocuments({ enabled: false });
+  
+      // Retourner les résultats dans une seule réponse JSON
+      return res.status(200).json({
+        nbTotalClient,
+        nbClientValideActif,
+        nbClientRefuse,
+        nbClientInactif,
+        nbWaitClient,
+      });
+    } catch (error) {
+      return res.status(400).json({ message: "Error fetching client counts", error: error.message });
+    }
+  };
+
+
+  static ListeClientTotal = async (req, res) => {
+    try {
+      const listeClientTotal = await Client.find();
+      return res.status(200).json({ listeClientTotal});
+    } catch (error) {
+      console.log(error.message);
+      return res.status(400).json({ message: "Error", error: error.message });
+    }
+  };
+  
 
 }
 

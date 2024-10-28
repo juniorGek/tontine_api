@@ -1,4 +1,5 @@
 const generateRandomPassword = require("../Components/generatePassword");
+const Client = require("../models/Client");
 const Log = require("../models/Log");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
@@ -133,6 +134,9 @@ class AuthController {
         .json({ message: "user not found", error: error.message });
     }
   };
+
+ 
+
 }
 
 module.exports = AuthController;
