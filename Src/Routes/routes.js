@@ -5,6 +5,7 @@ const AgentAuthController = require('../Controllers/AgentAuthController');
 const Categorie = require('../Controllers/Categorie');
 const Clients = require('../Controllers/Client');
 const checkUserType = require('../Middlewares/CheckUser');
+const ZoneController = require('../Controllers/Zone');
 const router = express.Router();
 require("dotenv").config();
 
@@ -36,5 +37,9 @@ router.post('/registerClient',Clients.clientRegister);
 router.get('/awaitClient',authMiddleware,Clients.waitList);
 router.get('/waitclient/details/:id',authMiddleware,Clients.detailWaitClient)
 
+
+//Zones
+router.post('/addZone',authMiddleware, checkUserType ,ZoneController.addZone);
+router.get('/listZone',authMiddleware,checkUserType,ZoneController.listeZone)
 
 module.exports = router;

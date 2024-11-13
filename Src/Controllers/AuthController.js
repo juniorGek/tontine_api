@@ -5,6 +5,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 class AuthController {
+  
   static register = async (req, res) => {
     try {
       const { user } = req.user; // Assuming userType is a field in the decoded token
